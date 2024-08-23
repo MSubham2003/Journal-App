@@ -14,11 +14,6 @@ public class JournalEntryController {
     @Autowired
     private JournalEntryService journalEntryService;
 
-    @GetMapping("/")
-    public String home(){
-        return "Welcome to home page of Journal Application";
-    }
-
     @GetMapping()
     public List<JournalEntry> getAll(){
         return journalEntryService.find();

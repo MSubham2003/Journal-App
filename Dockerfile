@@ -20,7 +20,7 @@ FROM openjdk:22-jdk-slim
 WORKDIR /app
 
 # Copy the jar file from the build stage to the final image
-COPY --from=build /app/target/movie-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=build /app/target/journalApp-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Verify the JAR file is copied
 RUN ls -l /app
