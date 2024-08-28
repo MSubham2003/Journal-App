@@ -10,13 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Document
 public class JournalEntry {
     @Id
     private ObjectId id;
     private String title;
-    private String Content;
+    private String content;
     private LocalDateTime date;
 }

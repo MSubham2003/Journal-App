@@ -18,19 +18,32 @@ public class JournalEntryController {
     private JournalEntryService journalEntryService;
 
     @GetMapping()
-    public List<JournalEntry> getAll(){
-        return journalEntryService.find();
+    public ResponseEntity<?> getAll(){
+        List<JournalEntry> journalEntry = journalEntryService.find();
+        if(journalEntry!=null && !journalEntry.isEmpty()){
+            return new ResponseEntity<>(journalEntry,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("NO Journals in the DB",HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("id/{id}")
-    public JournalEntry getJournalEntryById(@PathVariable ObjectId id){
-        return journalEntryService.findById(id).orElse(null);
+    public ResponseEntity<?> getJournalEntryById(@PathVariable ObjectId id){
+        Optional<JournalEntry> journalEntry = journalEntryService.findById(id);
+        if(journalEntry.isPresent()){
+            return new ResponseEntity<>(journalEntry.get(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Journal entry is not found with id "+id,HttpStatus.NOT_FOUND);
     }
 
     @PostMapping()
-    public boolean createEntry(@RequestBody JournalEntry journalEntry){
-        journalEntryService.save(journalEntry);
-        return true;
+    public ResponseEntity<?> createEntry(@RequestBody JournalEntry journalEntry){
+        try{
+            journalEntryService.save(journalEntry);
+            return new ResponseEntity<>(journalEntry,HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("id/{id}")
