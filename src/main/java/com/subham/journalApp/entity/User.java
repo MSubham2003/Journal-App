@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document
@@ -22,4 +23,5 @@ public class User {
     private String password;
     @DBRef
     private ArrayList<JournalEntry> journalEntries = new ArrayList<>();
+    private List<String> roles;
 }

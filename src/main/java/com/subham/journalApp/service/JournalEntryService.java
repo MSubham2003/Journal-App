@@ -27,7 +27,7 @@ public class JournalEntryService {
             journalEntry.setDate(LocalDateTime.now());
             JournalEntry saved = journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(saved);
-            userService.save(user);
+            userService.saveUser(user);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -44,17 +44,26 @@ public class JournalEntryService {
         return journalEntryRepository.findById(id);
     }
 
-    public void deleteJournal(ObjectId id, String username) throws Exception {
-        User user = userService.findByUserName(username);
-        if(!journalEntryRepository.existsById(id)){
-            throw new Exception("User With ID "+id+" not found");
+    @Transactional
+    public boolean deleteById(ObjectId id, String userName) {
+        boolean removed = false;
+        try {
+            User user = userService.findByUserName(userName);
+            removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if (removed) {
+                userService.saveUser(user);
+                journalEntryRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while deleting the entry.", e);
         }
-        user.getJournalEntries().removeIf(x->x.getId().equals(id));
-        userService.save(user);
-        journalEntryRepository.deleteById(id);
+        return removed;
     }
-
     public void saveEntry(JournalEntry oldJournalEntry) {
         journalEntryRepository.save(oldJournalEntry);
+    }
+
+    public User findByUserName(String userName){
+        return userService.findByUserName(userName);
     }
 }
