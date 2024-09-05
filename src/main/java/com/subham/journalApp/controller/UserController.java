@@ -19,10 +19,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
-    public String abc() {
-        return "Hello";
-    }
 
     @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody User user) {

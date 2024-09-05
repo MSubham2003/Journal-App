@@ -15,7 +15,7 @@ public class PublicController {
 
     @GetMapping("/health-check")
     public String healthCheck(){
-        return "OK";
+        return "Running Fine";
     }
 
     @PostMapping("/create-user")
